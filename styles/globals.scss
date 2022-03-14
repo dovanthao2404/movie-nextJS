@@ -2,8 +2,8 @@ html,
 body {
   padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, san s-serif;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans,
+    Helvetica Neue, san s-serif;
 }
 
 a {
@@ -15,4 +15,20 @@ a {
   box-sizing: border-box;
 }
 
+input {
+  padding: 10px 8px;
+  border: 1px solid #ccc;
+  outline: none;
+  min-width: 280px;
+  &:focus {
+    border: 1px solid rgb(71, 71, 255);
+  }
+}
 
+button {
+  padding: 8px 12px;
+  cursor: pointer;
+}
+.error {
+  color: rgb(214, 53, 53);
+}
