@@ -1,5 +1,5 @@
 import axios from "axios";
-import { DOMAIN } from "../utils/config/setting";
+import { DOMAIN } from "../utils/configs/settings";
 
 const api = axios.create({
     baseURL: DOMAIN,

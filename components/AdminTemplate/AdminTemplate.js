@@ -13,7 +13,6 @@ const AdminTemplate = ({ children }) => {
 
     const router = useRouter();
 
-    console.log(router);
     return (<>
         <Layout hasSider>
             <Sider
@@ -37,6 +36,11 @@ const AdminTemplate = ({ children }) => {
                         router.push(routerString.ListUser);
                     }} key={routerString.ListUser} icon={<UserAddOutlined />}>
                         List User
+                    </Menu.Item>
+                    <Menu.Item onClick={() => {
+                        router.push(routerString.MovieManagement);
+                    }} key={routerString.MovieManagement} icon={<UserAddOutlined />}>
+                        Movie Management
                     </Menu.Item>
                     {/* <Menu.Item onClick={() => {
                         dispatch(actLogout());

@@ -1,7 +1,14 @@
+import { USER_LOGIN } from "../../utils/configs/settings";
 import { LOGIN_FAILED, LOGIN_REQUEST, LOGIN_SUCCESS } from "../actions/UserManagementActions";
 
+let userLogin = typeof window !== 'undefined' && localStorage.getItem(USER_LOGIN) || null;
+
+if (userLogin) {
+    userLogin = JSON.parse(userLogin);
+}
+
 const initial = {
-    userLogin: null,
+    userLogin: userLogin,
     isLoading: false,
     error: null
 };
