@@ -32,3 +32,8 @@ button {
 .error {
   color: rgb(214, 53, 53);
 }
+
+.movie {
+  max-height: 400px;
+  overflow: auto;
+}

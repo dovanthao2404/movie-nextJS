@@ -32,15 +32,26 @@ const AdminTemplate = ({ children }) => {
                     }} key={routerString.Dashboard} icon={<UserOutlined />}>
                         Dashboard
                     </Menu.Item>
-                    <Menu.Item onClick={() => {
-                        router.push(routerString.ListUser);
-                    }} key={routerString.ListUser} icon={<UserAddOutlined />}>
-                        List User
-                    </Menu.Item>
+
                     <Menu.Item onClick={() => {
                         router.push(routerString.MovieManagement);
                     }} key={routerString.MovieManagement} icon={<UserAddOutlined />}>
                         Movie Management
+                    </Menu.Item>
+                    <Menu.Item onClick={() => {
+                        router.push(routerString.AddMovie);
+                    }} key={routerString.AddMovie} icon={<UserAddOutlined />}>
+                        Add movie
+                    </Menu.Item>
+                    <Menu.Item onClick={() => {
+                        router.push(routerString.CreateShowtime);
+                    }} key={routerString.CreateShowtime} icon={<UserAddOutlined />}>
+                        Create Showtime
+                    </Menu.Item>
+                    <Menu.Item onClick={() => {
+                        router.push(routerString.UserManagement);
+                    }} key={routerString.UserManagement} icon={<UserAddOutlined />}>
+                        User Management
                     </Menu.Item>
                     {/* <Menu.Item onClick={() => {
                         dispatch(actLogout());
@@ -50,7 +61,7 @@ const AdminTemplate = ({ children }) => {
                 </Menu>
             </Sider>
             <Layout className="site-layout" style={{ marginLeft: 200 }}>
-                <Content style={{ margin: '24px 16px 0', overflow: 'initial' }}>
+                <Content style={{ margin: '24px 16px 0', }}>
                     <div className="site-layout-background">
                         {children}
                     </div>

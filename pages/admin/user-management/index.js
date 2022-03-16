@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { Table, } from 'antd';
-import { useSelector } from 'react-redux';
-import axios from 'axios';
 import AdminTemplate from '../../../components/AdminTemplate/AdminTemplate';
+import { Table, } from 'antd';
 import { ButtonCommon } from '../../../components/common/Button';
+import axios from 'axios';
+import { useSelector } from 'react-redux';
+import Button from '@mui/material/Button';
+import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
+
+
 import Dialog from '@mui/material/Dialog';
 import { useFormik } from 'formik';
-import TextareaAutosize from '@mui/material/TextareaAutosize';
-import Button from '@mui/material/Button';
+
 
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
@@ -19,36 +22,52 @@ import FormLabel from '@mui/material/FormLabel';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 
-const apiGetMovie = "https://json-serve-hihi.herokuapp.com/api/v1/movies";
-const apiDeleteAndUpdateMovie = "https://json-serve-hihi.herokuapp.com/api/v1/movies/";
-const apiUploadPoster = "https://json-serve-hihi.herokuapp.com/api/v1/movies/upload-poster/";
+const apiGetUser = "https://json-serve-hihi.herokuapp.com/api/v1/users";
+const apiUploadAvatar = "https://json-serve-hihi.herokuapp.com/api/v1/users/upload-avatar/";
+const apiDeleteAndUpdateUser = "https://json-serve-hihi.herokuapp.com/api/v1/users/";
 
 
-const MovieManagement = () => {
 
+const UserManagement = () => {
+    const { userLogin } = useSelector(state => state.userManagementReducer);
 
     const [data, setData] = useState([]);
-    const { userLogin } = useSelector(state => state.userManagementReducer);
+
     const [open, setOpen] = useState(false);
 
+    const handleClose = () => {
+        setOpen(false);
+    };
+
     const getData = async () => {
-        const result = await axios.get(apiGetMovie);
+        const result = await axios.get(apiGetUser,
+            {
+                headers: {
+                    token: userLogin?.token
+
+                }
+            });
         setData(result.data);
     };
+
+
+    useEffect(() => {
+        getData();
+    }, []);
+
 
     const formik = useFormik({
         initialValues: {
             "name": "",
-            "trailer": "",
-            "description": "",
-            "isHot": false,
-            "isNowShowing": false,
+            "phoneNumber": "",
+            "dateOfBirth": new Date(),
+            "roles": "",
             id: -1
         },
         onSubmit: (values) => {
             (async () => {
                 try {
-                    await axios.put(`${apiDeleteAndUpdateMovie}${values.id}`, values, {
+                    await axios.put(`${apiDeleteAndUpdateUser}${values.id}`, values, {
                         headers: {
                             token: userLogin?.token
                         }
@@ -63,10 +82,15 @@ const MovieManagement = () => {
     });
 
 
-    useEffect(() => {
-        getData();
-    }, []);
 
+    const handleClickOpen = (item) => {
+        setOpen(true);
+        formik.setFieldValue("name", item.name);
+        formik.setFieldValue("phoneNumber", item.phoneNumber);
+        formik.setFieldValue("dateOfBirth", item.dateOfBirth);
+        formik.setFieldValue("roles", item.roles);
+        formik.setFieldValue("id", item.id);
+    };
 
     const columns = [
         {
@@ -80,19 +104,24 @@ const MovieManagement = () => {
             dataIndex: 'name',
         },
         {
-            title: 'description',
-            key: 'description',
-            dataIndex: 'description',
+            title: 'phoneNumber',
+            key: 'phoneNumber',
+            dataIndex: 'phoneNumber',
         },
         {
-            title: 'trailer',
-            key: 'trailer',
-            dataIndex: 'trailer'
+            title: 'email',
+            key: 'email',
+            dataIndex: 'email'
         },
         {
-            title: 'poster',
-            key: 'poster',
-            dataIndex: 'poster',
+            title: 'roles',
+            key: 'roles',
+            dataIndex: 'roles'
+        },
+        {
+            title: 'avatar',
+            key: 'avatar',
+            dataIndex: 'avatar',
             render: (value, item) => {
                 const handleChangeFile = async (e) => {
                     try {
@@ -100,7 +129,7 @@ const MovieManagement = () => {
                         const { name, files } = e.target;
                         const file = files[0];
                         formData.append(name, file, file.name);
-                        await axios.post(`${apiUploadPoster}${item.id}`, formData, {
+                        await axios.post(`${apiUploadAvatar}${item.id}`, formData, {
                             headers: {
                                 token: userLogin?.token
                             }
@@ -138,7 +167,7 @@ const MovieManagement = () => {
 
                 const handleDelete = async () => {
                     try {
-                        await axios.delete(`${apiDeleteAndUpdateMovie}${item.id}`, {
+                        await axios.delete(`${apiDeleteAndUpdateUser}${item.id}`, {
                             headers: {
                                 token: userLogin?.token
                             }
@@ -169,28 +198,16 @@ const MovieManagement = () => {
 
     ];
 
-    const handleClickOpen = (item) => {
-        setOpen(true);
-        formik.setFieldValue("name", item.name);
-        formik.setFieldValue("trailer", item.trailer);
-        formik.setFieldValue("description", item.description);
-        formik.setFieldValue("isHot", item.isHot);
-        formik.setFieldValue("isNowShowing", item.isNowShowing);
-        formik.setFieldValue("id", item.id);
-    };
-
-    const handleClose = () => {
-        setOpen(false);
-    };
-
     return (
         <AdminTemplate>
+
             <Table columns={columns} dataSource={data}
                 pagination={{
                     position: ["bottomCenter"]
                 }}
                 rowKey={"id"}
             />
+
             <Dialog
                 open={open}
                 keepMounted
@@ -221,57 +238,40 @@ const MovieManagement = () => {
                     />
                     <br />
                     <TextField
-                        label="Trailer"
+                        label="Phone number"
                         sx={{
                             width: "100%",
                             mb: "20px"
                         }}
-                        name="trailer"
+                        name="phoneNumber"
                         onChange={formik.handleChange}
-                        value={formik.values.trailer}
+                        value={formik.values.phoneNumber}
 
                     />
                     <br />
-                    <TextareaAutosize
-                        maxRows={6}
-                        placeholder='Description'
-                        style={{ width: "100%", height: 200 }}
-                        sx={{
-                            mb: "20px"
+                    <DesktopDatePicker
+                        label="Birthday"
+                        value={formik.values.dateOfBirth}
+                        onChange={(e) => {
+                            formik.setFieldValue("dateOfBirth", e);
                         }}
-                        name="description"
-                        value={formik.values.description}
-                        onChange={formik.handleChange}
+                        renderInput={(params) => <TextField {...params} />}
                     />
                     <br />
                     <FormControl>
-                        <FormLabel id="demo-row-radio-buttons-group-label">Hot</FormLabel>
+                        <FormLabel id="demo-row-radio-buttons-group-label">Roles</FormLabel>
                         <RadioGroup
                             row
                             aria-labelledby="demo-row-radio-buttons-group-label"
                             onChange={formik.handleChange}
-                            name="isHot"
-                            value={formik.values.isHot}
+                            name="roles"
+                            value={formik.values.roles}
                         >
-                            <FormControlLabel value={true} control={<Radio />} label="True" />
-                            <FormControlLabel value={false} control={<Radio />} label="False" />
+                            <FormControlLabel value={"ADMIN"} control={<Radio />} label="Admin" />
+                            <FormControlLabel value={"CLIENT"} control={<Radio />} label="Client" />
                         </RadioGroup>
                     </FormControl>
                     <br />
-                    <FormControl>
-                        <FormLabel id="demo-row-radio-buttons-group-label">Now show</FormLabel>
-                        <RadioGroup
-                            row
-                            aria-labelledby="demo-row-radio-buttons-group-label"
-                            onChange={formik.handleChange}
-                            name="isNowShowing"
-                            value={formik.values.isNowShowing}
-
-                        >
-                            <FormControlLabel value={true} control={<Radio />} label="True" />
-                            <FormControlLabel value={false} control={<Radio />} label="False" />
-                        </RadioGroup>
-                    </FormControl>
                     <br />
                     <Box sx={{
                         display: "flex",
@@ -283,8 +283,8 @@ const MovieManagement = () => {
                     </Box>
                 </Box>
             </Dialog>
-        </AdminTemplate >
+        </AdminTemplate>
     );
 };
 
-export default MovieManagement;
+export default UserManagement;
