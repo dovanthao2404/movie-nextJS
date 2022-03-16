@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react/cjs/react.development';
+import { useEffect } from 'react';
 export default function Home() {
   const router = useRouter();
 
