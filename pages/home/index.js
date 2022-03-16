@@ -8,7 +8,6 @@ if (typeof window !== "undefined") {
     host = window.location.host;
 }
 
-console.log(host);
 const Home = (props) => {
 
     const meta = (<>
